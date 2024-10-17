@@ -7,7 +7,7 @@
     <div class="video-section" [class.collapsed-chat]="!isChatVisible" [ngClass]="getVideoLayoutClass()">
         <div id="video-player-container">
             <div *ngFor="let userId of paginatedVideos" class="video-container">
-                <video id="{{userId}}" media-type="video" autoplay muted></video>
+                <video id="{{userId}}" class="video-cell" media-type="video" autoplay muted></video>
               </div>
         </div>
         <div class="controls">

@@ -65,7 +65,7 @@ export class VideoCallComponent {
     this.client.init("en-US", "Global", { patchJsMedia: true, enforceMultipleVideos: true}).then(async () => {
 
       this.client.join(this.sessionName, jwtToken, this.name).then(async () => {
-        const mediaStream = this.client.getMediaStream();
+      const mediaStream = this.client.getMediaStream();
       await  mediaStream.startAudio();
       await  mediaStream.startVideo();
         console.log("Video Started :  ");
