@@ -96,24 +96,24 @@ export class VideoCallComponent {
           userVideo.style.backgroundColor="#80808096";
 
 
-          // const videoPlayer = document.createElement('video-player');
-          // videoPlayer.setAttribute('node-id', userId.toString()); // Use the dynamic userId here
-          // videoPlayer.setAttribute('video-quality', '720p');
+          const videoPlayer = document.createElement('video-player');
+          videoPlayer.setAttribute('node-id', userId.toString()); // Use the dynamic userId here
+          videoPlayer.setAttribute('video-quality', '720p');
 
 
-          // const videoElement = document.createElement('video');
-          // videoElement.setAttribute('autoplay', 'true');
-          // videoElement.setAttribute('playsinline', 'true');
-          // videoElement.style.width = '100%'; // Set video width
-          // videoElement.style.height = '100%'; // Set video height
+          const videoElement = document.createElement('video');
+          videoElement.setAttribute('autoplay', 'true');
+          videoElement.setAttribute('playsinline', 'true');
+          videoElement.style.width = '100%'; // Set video width
+          videoElement.style.height = '100%'; // Set video height
 
 
-          // // Append the video element to the video-player element
-          // videoPlayer.appendChild(videoElement);
+           // Append the video element to the video-player element
+          videoPlayer.appendChild(videoElement);
 
 
-          // videoPlayerContainer.appendChild(videoPlayer as VideoPlayer);
-          videoPlayerContainer.appendChild(userVideo);
+          videoPlayerContainer.appendChild(videoPlayer as VideoPlayer);
+          // videoPlayerContainer.appendChild(userVideo);
           this.userVideos.push(userId);
     });
    
