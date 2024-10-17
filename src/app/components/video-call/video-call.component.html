@@ -6,16 +6,9 @@
     
     <div class="video-section" [class.collapsed-chat]="!isChatVisible" [ngClass]="getVideoLayoutClass()">
         <div id="video-player-container">
-            <!-- <canvas id="participant-videos-canvas" width="1920" height="1080"></canvas> -->
-            <div id="sessionContainer" class="video-container">
-               
-            </div>
-s
-    
-            <!-- <div *ngFor="let userId of paginatedVideos" class="video-container">
+            <div *ngFor="let userId of paginatedVideos" class="video-container">
                 <video id="{{userId}}" media-type="video" autoplay muted></video>
-              </div> -->
-
+              </div>
         </div>
         <div class="controls">
             <button *ngIf="!isAudioMuted" (click)="onMicrophoneClick()" class="button-circle">

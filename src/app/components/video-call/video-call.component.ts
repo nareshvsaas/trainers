@@ -62,30 +62,44 @@ export class VideoCallComponent {
     const jwtToken = this.generateVideoSdkApiJwt("iCjNmlJ0tHuA5k6qM3y7S1Vo4hjO0VyyoCXV", "ulaqib8IDthk6SQaT4GiNKFkbAfzMHjQ12x8");
     this.client = ZoomVideo.createClient();
     this.setupEventListeners();
-    await this.client.init("en-US", "Global", { patchJsMedia: true });
-    await this.client.join(this.sessionName, jwtToken, this.name);
-    const mediaStream = this.client.getMediaStream();
-    await mediaStream.startAudio();
-    await mediaStream.startVideo();
-    console.log("Video Started :  ");
-    this.renderVideo("Start",  this.client.getCurrentUserInfo().userId);
+    this.client.init("en-US", "Global", { patchJsMedia: true, enforceMultipleVideos: true}).then(async () => {
+
+      this.client.join(this.sessionName, jwtToken, this.name).then(async () => {
+        const mediaStream = this.client.getMediaStream();
+      await  mediaStream.startAudio();
+      await  mediaStream.startVideo();
+        console.log("Video Started :  ");
+        this.renderVideo("Start", this.client.getCurrentUserInfo().userId);
+      });
+    });
   }
 
-  async renderVideo(action: string, userId: number){
+  async renderVideo(action: string, userId: number) {
     const mediaStream = this.client.getMediaStream();
     if (action === "Stop") {
       const element = await mediaStream.detachVideo(userId);
       Array.isArray(element) ? element.forEach((el) => el.remove()) :
-      element.remove();
+        element.remove();
       this.userVideos = this.userVideos.filter(id => id !== userId); // Update userVideos
     } else {
       if (!this.userVideos.includes(userId)) {
         this.userVideos.push(userId);
-        const userVideo = await mediaStream.attachVideo(userId, VideoQuality.Video_360P);
-        this.sessionContainer.appendChild(userVideo as VideoPlayer);
-      };
+        setTimeout(() => {
+          mediaStream.attachVideo(userId, VideoQuality.Video_720P).then((userVideo: any) => {
+            userVideo.style.backgroundColor = "#80808096";
+            const videoElement = document.getElementById(userId.toString());
+            if (videoElement) {
+              mediaStream.renderVideo(videoElement, userId);
+            } else {
+              console.error(`Video element for user ${userId} not found.`);
+            }
+          });
+        }, 100);
       }
+    }
   }
+
+
 
 
 
