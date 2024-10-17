@@ -55,8 +55,6 @@ export class VideoCallComponent {
     });
     console.log("In call component");
     this.sessionContainer = document.getElementById('sessionContainer');
-   
-    console.log("SharedArrayBuffer:  " +  typeof SharedArrayBuffer === 'function');
     this.joinMeeting();
   }
 
@@ -64,15 +62,13 @@ export class VideoCallComponent {
     const jwtToken = this.generateVideoSdkApiJwt("iCjNmlJ0tHuA5k6qM3y7S1Vo4hjO0VyyoCXV", "ulaqib8IDthk6SQaT4GiNKFkbAfzMHjQ12x8");
     this.client = ZoomVideo.createClient();
     this.setupEventListeners();
-    this.client.init("en-US", "Global", { patchJsMedia: true, enforceMultipleVideos:true }).then(async () => {
+    await this.client.init("en-US", "Global", { patchJsMedia: true });
     await this.client.join(this.sessionName, jwtToken, this.name);
     const mediaStream = this.client.getMediaStream();
     await mediaStream.startAudio();
     await mediaStream.startVideo();
-    console.log("crossOriginIsolated:  " +  crossOriginIsolated);
+    console.log("Video Started :  ");
     this.renderVideo("Start",  this.client.getCurrentUserInfo().userId);
-    });
-
   }
 
   async renderVideo(action: string, userId: number){
@@ -85,33 +81,10 @@ export class VideoCallComponent {
     } else {
       if (!this.userVideos.includes(userId)) {
         this.userVideos.push(userId);
-
-
-        mediaStream.attachVideo(userId, 3).then(() => {
-          const user = this.client.getAllUser().find((u: { userId: number }) => u.userId === userId);
-          setTimeout(() => {
-          const videoElement = document.getElementById(user.userId);
-            if (videoElement) {
-                console.log(`Rendering video for user ${userId}`);
-                videoElement.style.backgroundColor="#80808096";
-                videoElement.setAttribute('autoplay', 'true');
-                videoElement.setAttribute('playsinline', 'true');
-                videoElement.style.width = '100%'; // Set video width
-                videoElement.style.height = '100%'
-                mediaStream.renderVideo(videoElement, userId);
-            } else {
-                console.error(`Video element for user ${userId} not found.`);
-            }
-          }, 100)
-
-
-        }).catch((error: any) => {
-            console.error(`Error rendering video for user ${userId}:`, error);
-        })
-       
-   
+        const userVideo = await mediaStream.attachVideo(userId, VideoQuality.Video_360P);
+        this.sessionContainer.appendChild(userVideo as VideoPlayer);
+      };
       }
-    }
   }
 
 
