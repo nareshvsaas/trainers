@@ -1,0 +1,76 @@
+<div id="mydiv" *ngIf="loaderHide">
+    <img src="../../../assets/images/landing_img.gif" width="10%" class="ajax-loader" />
+  </div>
+  
+  <div class="container login-div-style text-center mb-5">
+  
+    <div class="row">
+      <div class="col-11 col-sm-12 col-md-6 col-lg-6 login__wrapper m-auto">
+        <div class="login__form-section">
+          <form autocomplete="off">
+            <div class="login__fileds">
+              <h1 class="text-center login-heading-style"><span>Sign In</span></h1>
+              <div class="form-group fit-my-4">
+                <input type="email" id="inputEmail"  autocomplete="off" class="login-form-control  col-12  user__name" #useremail="ngModel"
+                   [(ngModel)]="email" name="username" placeholder="Email*" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <i class="fas fa-envelope login-fa-icon-style"></i>
+                <div *ngIf="useremail.invalid && (useremail.dirty || useremail.touched)" class="alert alert-danger">
+                  <div *ngIf="useremail.errors?.['pattern']">
+                    Please include &#64; in the Email.
+                  </div>
+                </div>
+              </div>
+              <div class="form-group fit-my-4">
+                <input [type]="show ? 'text' : 'password'" id="inputPassword" autocomplete="nope" class="login-form-control col-12"
+                  [(ngModel)]="password" name="password" #userPassword="ngModel" placeholder="Password*" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z0-9\S]{8,}$">
+                <!-- <span class="floating-label"><i class="fas fa-key"></i> Password</span> -->
+                <i class="fas fa-key login-fa-icon-style"></i>
+                <i _ngcontent-c2="" class="fas fa-eye login-fa-icon-style" (click)="showPassword()" *ngIf="showSplash" style="top: 9px; left: 88%;"></i>
+                <i _ngcontent-c2="" class="fas fa-eye-slash login-fa-icon-style" (click)="showPassword()" *ngIf="showEye" style="top: 9px; left: 88%;"></i>
+                <div *ngIf="userPassword.invalid && (userPassword.dirty || userPassword.touched)" class="alert alert-danger">
+                  <div *ngIf="userPassword.errors?.['pattern']">
+                    Password must be at least 8 characters with 1 uppercase, 1 number, and 1 special character.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center btn-margin fit-my-4">
+              <button class="btn btn-circle nextBtn " (click)="onLogin()" id="signupSubmit" type="submit"><i class="fas fa-angle-right"></i></button>
+            </div>
+            <div class="login__with text-center fit-my-4">
+              <a (click)="loginGoogle()" class="login-google login-google col-11 col-md-10 mx-auto">
+                <img src="../../../assets/images/googleIcon.png" class="img-responsive" />
+                <span style="font-size: 13px;" class="px-2">SIGN IN WITH GOOGLE</span>
+              </a>
+  
+            </div>
+  
+            <div class="login__form-forgot col mt-2">
+              <div class="text-center" >
+                <div><a style="cursor: pointer;" routerLink="/forgetPassword">
+                  <i class="fas fa-unlock-alt"></i>
+                  Forgot Password</a></div>
+                <a style="cursor: pointer;" routerLink="/resend"><span><i class="fas fa-redo-alt"></i>Resend code</span></a>
+                <span><a style="cursor: pointer;margin-left:10px;" routerLink="/privacy"><i class="fas fa-clipboard-list"></i> Terms of Use</a></span>
+  
+              </div>
+            </div>
+  
+            <div class="text-center login__form-sign-up">
+              <a routerLink="/register"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-12 my-3">
+          <div class="row">
+            <div class="col"><img src="../../../assets/images/icons/gply.png" style="width: 150px; box-shadow: 0 0px 6px rgba(154, 246, 123, 0.3);
+              border-radius: 5px;" /></div>
+            <div class="col"><img src="../../../assets/images/icons/aply.png" style="width: 150px; box-shadow: 0 0px 6px rgba(154, 246, 123, 0.3);
+              border-radius: 5px;" /></div>
+          </div>
+  
+          </div>
+      </div>
+    </div>
+  </div>
+  

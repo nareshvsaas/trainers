@@ -1,0 +1,97 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <!-- Exercise Search box -->
+            <div class="col-md-8 text-center m-auto search__box-locations">
+                <div class="search__box d-flex">
+                    <input type="text" autocomplete="off" name="search" placeholder="Search for a Trainer/Location"
+                        (ngModelChange)="modelChanged()" [(ngModel)]="searchTrainer" />
+                    <a class="search__box__btn search__box__btn-exercise-open" style="cursor: pointer">
+                        <i class="fas fa-search"></i>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- Exercise Search box /-->
+        </div>
+    </div>
+</section>
+<section>
+    <div class="container-fluid">
+        <div class="col">
+            <!-- Exercise Video -->
+            <div class="videos videos-exercise row" *ngIf="showLocDB">
+                <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 exercise-video-div-grid" style="margin-bottom: 30px"
+                    *ngFor="let trainer of trainersDataLoctn">
+                    <div class="video_wrapper">
+                        <div class="video_file">
+                            <a>
+                                <video (click)="openVideo(trainer.mp4Destination,template)"
+                                    onloadedmetadata="this.muted=true" muted="" loop="" playsinline=""
+                                    onmouseover="this.play()" onmouseout="this.load();"
+                                    poster="{{ trainer.thumbnailDestination }}" style="width: 100%">
+                                    <source _ngcontent-c3="" src="{{ trainer.mp4Destination }}" />
+                                </video>
+                            </a>
+                        </div>
+                        <div class="video__title">
+                            <h3>{{ trainer.firstName }} {{ trainer.lastName }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="search-results" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50"
+                (scrolled)="onScroll()">
+                <div class="videos videos-exercise row" *ngIf="showOvrDb">
+                    <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 exercise-video-div-grid" style="margin-bottom: 30px"
+                        *ngFor="let trainer of trainersData | filter: searchTrainer">
+                        <div class="video_wrapper">
+                            <div class="video_file">
+                                <a>
+                                    <video (click)="
+                        openVideo(trainer.profileIntroVideo.videoMp4Destination,template)
+                      " onloadedmetadata="this.muted=true" data-toggle="modal" data-target="#contentModal"
+                                        onloadedmetadata="this.muted=true" muted="" loop="" playsinline=""
+                                        onmouseover="this.play()" onmouseout="this.load();"
+                                        poster="{{ trainer.profileIntroVideo.videoThumbnailPath }}" style="width: 100%">
+                                        <source _ngcontent-c3=""
+                                            src="{{ trainer.profileIntroVideo.videoMp4Destination }}" />
+                                    </video>
+                                </a>
+                            </div>
+                            <div class="video__title">
+                                <h3>{{ trainer.firstName }} {{ trainer.lastName }}</h3>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="float: right; color: #8dc63f;">Powerd By <a href="https://vsaastechnologies.com/"
+                    target="_blank" style="color: #8dc63f;"> Vsaas Technologies Pvt Ltd</a></div>
+
+            <!-- Exercise Video /-->
+            <ng-container *ngIf="hideMenu">
+                <div class="program_links_list">
+                    <a href="calendar.html">Calendar</a>
+                    <a href="#">Nutrition</a>
+                    <a href="#">Workout</a>
+                </div>
+            </ng-container>
+        </div>
+        <ng-template #template>
+
+            <div class="modal-body">
+                <div class="video-pop zoomIn modal-body background-shadow-green" style="border-radius: 12px">
+                    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <video autoplay="" loop="" muted="" playsinline="" controls="controls" style="width: 100%">
+                        <source attr.src="{{ videoUrl }}" type="video/mp4" />
+                    </video>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</section>

@@ -1,0 +1,12 @@
+.location__trainer i {
+    float : right;
+}
+.video_wrapper {
+    /* border: solid 4px #8bc53f5e; */
+    box-shadow: 0 0px 8px rgba(154, 246, 123, 0.3);
+    border-radius: 10px;
+}
+
+.videos-exercise{
+    padding: 2%;
+}
