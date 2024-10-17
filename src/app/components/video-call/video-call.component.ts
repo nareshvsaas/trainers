@@ -84,38 +84,31 @@ export class VideoCallComponent {
       this.userVideos = this.userVideos.filter(id => id !== userId); // Update userVideos
     } else {
       if (!this.userVideos.includes(userId)) {
-         if(this.userVideos.length == 0){
-          const videoPlayerContainer = document.createElement('video-player-container');
-          this.sessionContainer.appendChild(videoPlayerContainer as VideoPlayerContainer);
-         }
-        mediaStream.attachVideo(userId, VideoQuality.Video_720P).then((userVideo: any) => {
-         
-          const videoPlayerContainer = document.querySelector(
-            "video-player-container"
-          ) as Element;
-          userVideo.style.backgroundColor="#80808096";
+        this.userVideos.push(userId);
 
 
-          const videoPlayer = document.createElement('video-player');
-          videoPlayer.setAttribute('node-id', userId.toString()); // Use the dynamic userId here
-          videoPlayer.setAttribute('video-quality', '720p');
+        mediaStream.attachVideo(userId, 3).then(() => {
+          const user = this.client.getAllUser().find((u: { userId: number }) => u.userId === userId);
+          setTimeout(() => {
+          const videoElement = document.getElementById(user.userId);
+            if (videoElement) {
+                console.log(`Rendering video for user ${userId}`);
+                videoElement.style.backgroundColor="#80808096";
+                videoElement.setAttribute('autoplay', 'true');
+                videoElement.setAttribute('playsinline', 'true');
+                videoElement.style.width = '100%'; // Set video width
+                videoElement.style.height = '100%'
+                mediaStream.renderVideo(videoElement, userId);
+            } else {
+                console.error(`Video element for user ${userId} not found.`);
+            }
+          }, 100)
 
 
-          const videoElement = document.createElement('video');
-          videoElement.setAttribute('autoplay', 'true');
-          videoElement.setAttribute('playsinline', 'true');
-          videoElement.style.width = '100%'; // Set video width
-          videoElement.style.height = '100%'; // Set video height
-
-
-           // Append the video element to the video-player element
-          videoPlayer.appendChild(videoElement);
-
-
-          videoPlayerContainer.appendChild(videoPlayer as VideoPlayer);
-          // videoPlayerContainer.appendChild(userVideo);
-          this.userVideos.push(userId);
-    });
+        }).catch((error: any) => {
+            console.error(`Error rendering video for user ${userId}:`, error);
+        })
+       
    
       }
     }
