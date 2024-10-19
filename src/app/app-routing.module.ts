@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'content', component: ContentComponent },
   { path: 'login', component: LoginComponent },
   // {path: 'call/:name/:role/:user_id', component: VideoCallComponent},
-  {path: 'call/:name/:role/:user_id', component: VideoComponent}
+  {path: 'call/:name/:user_id', component: VideoComponent}
 ];
 
 @NgModule({

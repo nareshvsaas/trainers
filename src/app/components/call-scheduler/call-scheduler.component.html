@@ -9,7 +9,7 @@
         <option>host</option>
         <option>participant</option>
     </select><br><br>
-    <button *ngIf="role=='host'" (click)="joinMeeting()">Join Meeting</button>
+    <button (click)="joinMeeting()">Join Meeting</button>
 </div>
 <div class="container" *ngIf="role=='participant'">
     <div class="row">
@@ -21,9 +21,10 @@
                     </p>
 
                     <div *ngFor="let participant of menu.participants" style="text-align: left;">
-                        {{participant.first_name}} <img src="assets/call-enable.png" alt="profile-image"
+                        {{participant.first_name}} 
+                        <!-- <img src="assets/call-enable.png" alt="profile-image"
                             style="height: 30px; width: 30px; cursor: pointer;"
-                            (click)="onJoinRoom(participant.slotId, participant.first_name, participant.trainee_id)">
+                            (click)="onJoinRoom(participant.slotId, participant.first_name, participant.trainee_id)"> -->
                     </div>
 
                     <div></div>

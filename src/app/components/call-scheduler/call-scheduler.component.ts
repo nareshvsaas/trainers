@@ -24,36 +24,55 @@ export class CallSchedulerComponent {
   }
   
   ngOnInit() {
-    this.getSchedulerDataFromServer();
+    // this.getSchedulerDataFromServer();
   }
 
-  getSchedulerDataFromServer() {
-    var index = '/scheduler/slots';
-    var data = {
-      "trainerId": this.userID,
-      "month": this.currentMonth,
-      "timezone": this.timezone,
-    }
-    this.http.post(this.SERVER_LINK + index, data).subscribe(
-      (response:any) => {
-        this.daysdata = response.data;
-        this.daysdata = this.daysdata.filter((data: any) => data.participants.length > 0 && data.status=='open');
-      },
-      (error: any) => {
-        console.log("An error has occurred while retriving profile data.");
-      }
-    )
-  }
+  // getSchedulerDataFromServer() {
+  //   var index = '/scheduler/slots';
+  //   var data = {
+  //     "trainerId": this.userID,
+  //     "month": this.currentMonth,
+  //     "timezone": this.timezone,
+  //   }
+  //   this.http.post(this.SERVER_LINK + index, data).subscribe(
+  //     (response:any) => {
+  //       this.daysdata = response.data;
+  //       this.daysdata = this.daysdata.filter((data: any) => data.participants.length > 0 && data.status=='open');
+  //     },
+  //     (error: any) => {
+  //       console.log("An error has occurred while retriving profile data.");
+  //     }
+  //   )
+  // }
 
-  onJoinRoom(slotId: string, name: string, trainee_id: string){
+  onJoinRoom(name: string, trainee_id: string){
     this.name = name;
+    const userID = randomID(5);
     this.user_id = trainee_id; 
     console.log(this.name + "   " + this.role);
     this.route.navigate(['call/'+this.name +'/' + this.role + '/' + this.user_id])
   }
 
   joinMeeting(){
+    let USER_ID = "";
     console.log(this.name + "   " + this.role);
-    this.route.navigate(['call/'+this.name +'/' + this.role+ '/' + this.userID])
+    if(this.role == 'host')
+      USER_ID = this.userID;
+    else
+      USER_ID = randomID(6);
+    this.route.navigate(['call/'+this.name +'/' + USER_ID])
     }
+}
+
+function randomID(len: number) {
+  let result = '';
+  if (result) return result;
+  var chars = '12345qwertyuiopasdfgh67890jklmnbvcxzMNBVCZXASDQWERTYHGFUIOLKJP',
+    maxPos = chars.length,
+    i;
+  len = len;
+  for (i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * maxPos));
+  }
+  return result;
 }

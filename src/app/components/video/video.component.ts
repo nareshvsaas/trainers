@@ -14,7 +14,6 @@ export class VideoComponent {
   sub: any;
 
   name: string = "";
-  role: number = 0;
   user_id: string = "";
   APP_ID:number = 978108198;
   room_id = "test-rrom"
@@ -62,11 +61,6 @@ export class VideoComponent {
     this.sub = this.route.params.subscribe(params => {
       this.name= params['name'];
       this.user_id= params['user_id'];
-      var roleparam = params['role'];
-      if(roleparam == "host")
-        this.role=1;
-      else
-        this.role=0;
     });
   
   }
