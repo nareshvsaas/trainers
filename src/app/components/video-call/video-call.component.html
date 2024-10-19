@@ -5,11 +5,15 @@
 <div class="container" style="padding: 1vw;">
     
     <div class="video-section" [class.collapsed-chat]="!isChatVisible" [ngClass]="getVideoLayoutClass()">
-        <div id="video-player-container">
+            <!-- <canvas id="participant-videos-canvas" width="1920" height="1080"></canvas> -->
+           <div id="sessionContainer" class="video-container">
+               
+            </div> 
+<!--     
             <div *ngFor="let userId of paginatedVideos" class="video-container">
-                <video id="{{userId}}" class="video-cell" media-type="video" autoplay muted></video>
-              </div>
-        </div>
+                <video id="{{userId}}" media-type="video" autoplay muted></video>
+              </div>  -->
+
         <div class="controls">
             <button *ngIf="!isAudioMuted" (click)="onMicrophoneClick()" class="button-circle">
                 <img src="../../../assets/images/participants/audio-muted.svg">

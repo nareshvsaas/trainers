@@ -19,6 +19,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { ToastrModule } from 'ngx-toastr';
 import { VideoCallComponent } from './components/video-call/video-call.component';
 import { CallSchedulerComponent } from './components/call-scheduler/call-scheduler.component';
+import { VideoComponent } from './components/video/video.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { CallSchedulerComponent } from './components/call-scheduler/call-schedul
     FilterPipe,
     HeaderComponent,
     VideoCallComponent,
-    CallSchedulerComponent
+    CallSchedulerComponent,
+    VideoComponent
   ],
   imports: [
     // Firebase imports
@@ -48,7 +50,7 @@ import { CallSchedulerComponent } from './components/call-scheduler/call-schedul
     InfiniteScrollModule
   ],
   providers: [],
-  schemas: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

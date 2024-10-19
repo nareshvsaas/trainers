@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, NgZone, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import ZoomVideo, { VideoPlayer, VideoPlayerContainer, VideoQuality } from '@zoom/videosdk';
 import { KJUR } from 'jsrsasign';
@@ -39,7 +39,7 @@ export class VideoCallComponent {
   users: any;
   sessionContainer: any;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private route: ActivatedRoute, private ngZone: NgZone) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -62,16 +62,27 @@ export class VideoCallComponent {
     const jwtToken = this.generateVideoSdkApiJwt("iCjNmlJ0tHuA5k6qM3y7S1Vo4hjO0VyyoCXV", "ulaqib8IDthk6SQaT4GiNKFkbAfzMHjQ12x8");
     this.client = ZoomVideo.createClient();
     this.setupEventListeners();
+    this.ngZone.runOutsideAngular(() => {
     this.client.init("en-US", "Global", { patchJsMedia: true, enforceMultipleVideos: true}).then(async () => {
 
       this.client.join(this.sessionName, jwtToken, this.name).then(async () => {
       const mediaStream = this.client.getMediaStream();
       await  mediaStream.startAudio();
-      await  mediaStream.startVideo();
-        console.log("Video Started :  ");
-        this.renderVideo("Start", this.client.getCurrentUserInfo().userId);
+
+      await mediaStream.startVideo().then(() => {
+        mediaStream.attachVideo(this.client.getCurrentUserInfo().userId, VideoQuality.Video_720P).then((userVideo: any) => {
+          const videoPlayerContainer = document.createElement('video-player-container');
+          videoPlayerContainer.appendChild(userVideo as VideoPlayer);
+          this.sessionContainer.appendChild(videoPlayerContainer as VideoPlayerContainer);
+          mediaStream.render(userVideo as VideoPlayer, this.client.getCurrentUserInfo().userId);
+        });
+      });
+
+      console.log("Video Started :  " + this.client.getCurrentUserInfo().userId);
+        // this.renderVideo("Start", this.client.getCurrentUserInfo().userId);
       });
     });
+  });
   }
 
   async renderVideo(action: string, userId: number) {
@@ -83,18 +94,42 @@ export class VideoCallComponent {
       this.userVideos = this.userVideos.filter(id => id !== userId); // Update userVideos
     } else {
       if (!this.userVideos.includes(userId)) {
+        if (this.userVideos.length == 0) {
+          const videoPlayerContainer = document.createElement('video-player-container');
+          this.sessionContainer.appendChild(videoPlayerContainer as VideoPlayerContainer);
+        }
+
         this.userVideos.push(userId);
-        setTimeout(() => {
+        this.ngZone.runOutsideAngular(() => {
           mediaStream.attachVideo(userId, VideoQuality.Video_720P).then((userVideo: any) => {
+            // Set background color for the user video element
             userVideo.style.backgroundColor = "#80808096";
-            const videoElement = document.getElementById(userId.toString());
-            if (videoElement) {
-              mediaStream.renderVideo(videoElement, userId);
-            } else {
-              console.error(`Video element for user ${userId} not found.`);
-            }
+
+            // Create a video player element
+            const videoPlayer = document.createElement('video-player');
+            videoPlayer.setAttribute('node-id', userId.toString());
+            videoPlayer.setAttribute('video-quality', '720p');
+
+            // Create the video element
+            const videoElement = document.createElement('video');
+            videoElement.setAttribute('autoplay', 'true');
+            videoElement.setAttribute('playsinline', 'true');
+            videoElement.style.width = '100%';
+            videoElement.style.height = '100%';
+
+            // Append the video element to the video-player element
+            videoPlayer.appendChild(videoElement);
+
+            // Append the video-player to the video-player-container
+            const videoPlayerContainer = document.querySelector('video-player-container') as HTMLElement;
+            videoPlayerContainer.appendChild(videoPlayer);
+
+            // Render the video into the created video element
+            mediaStream.renderVideo(videoElement, userId);
+          }).catch((error: any) => {
+            console.error("Error attaching video: ", error);
           });
-        }, 100);
+        });
       }
     }
   }
@@ -228,4 +263,6 @@ export class VideoCallComponent {
   updateVideosPerPage() {
     this.currentPage = 1; // Reset to first page when changing videos per page
   }
+
+  
 }
