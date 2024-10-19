@@ -16,7 +16,7 @@ export class VideoComponent {
   name: string = "";
   user_id: string = "";
   APP_ID:number = 978108198;
-  room_id = "test-rrom"
+  room_id = "test-room"
 
   constructor(private route: ActivatedRoute) {
 
@@ -51,7 +51,8 @@ export class VideoComponent {
         scenario: {
           mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
         },
-        showPreJoinView: false 
+        showPreJoinView: false,
+        // showScreenSharingButton: false
 
       });
     });
